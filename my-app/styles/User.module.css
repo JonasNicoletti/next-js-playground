@@ -1,0 +1,23 @@
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  margin: auto;
+  text-align: center;
+  padding: 2rem;
+}
+
+.title {
+  font-weight: lighter;
+  font-size: 18px;
+}
+
+.key {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+}
+
