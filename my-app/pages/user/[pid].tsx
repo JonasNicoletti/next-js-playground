@@ -1,23 +1,10 @@
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react";
 import { User } from '../../types'
 import styles from '../../styles/User.module.css'
-
-export default function UserPage() {
-  const [user, setUser] = useState<User|null>(null);
-  const router = useRouter()
-  const { pid } = router.query;
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetch(
-        `https://jonasnicoletti.github.io/data/users/${pid}.json`,
-      );
-        const data = await result.json()
-      setUser(data);
-    };
-
-    fetchData();
-  }, []);
+import { GetServerSideProps, NextPage } from "next";
+type UserProps = {
+  user: User
+}
+const UserPage: NextPage<UserProps> = ({ user }) => {
 
   function getSalutation(gender: "Female" | "Male"): string {
     switch(gender) {
@@ -42,3 +29,17 @@ export default function UserPage() {
 
   </div>
 }
+
+// This gets called on every request
+export const getServerSideProps: GetServerSideProps = async ({params}) => {
+  // Fetch data from external API
+  const res = await fetch(
+    `https://jonasnicoletti.github.io/data/users/${params?.pid}.json`,
+  );
+  const data = await res.json()
+
+// Pass data to the page via props
+return { props: { user: data } }
+}
+
+export default UserPage;

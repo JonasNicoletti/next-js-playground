@@ -1,24 +1,13 @@
-import type { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import { User } from '../types'
 
-const Home: NextPage = () => {
-  const [users, setUsers ] = useState<User[]>();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetch(
-        'https://jonasnicoletti.github.io/data/users.json',
-      );
-        const data = await result.json()
-      setUsers(data);
-    };
-
-    fetchData();
-  }, []);
+type HomeProps = {
+  users: User[]
+}
+const Home: NextPage<HomeProps> = ({users}) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -44,4 +33,13 @@ const Home: NextPage = () => {
   )
 }
 
+// This gets called on every request
+export const getServerSideProps: GetServerSideProps = async () => {
+    // Fetch data from external API
+  const res = await fetch('https://jonasnicoletti.github.io/data/users.json')
+  const data = await res.json()
+
+  // Pass data to the page via props
+  return { props: { users: data } }
+}
 export default Home
