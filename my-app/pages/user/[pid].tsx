@@ -1,6 +1,6 @@
 import { User } from '../../types'
 import styles from '../../styles/User.module.css'
-import { GetServerSideProps, NextPage } from "next";
+import { GetServerSideProps, GetStaticPaths, GetStaticProps, NextPage } from "next";
 type UserProps = {
   user: User
 }
@@ -30,8 +30,18 @@ const UserPage: NextPage<UserProps> = ({ user }) => {
   </div>
 }
 
+export const getStaticPaths: GetStaticPaths = async () => {
+  const res = await fetch('https://jonasnicoletti.github.io/data/users.json')
+  const data = await res.json() as User[];
+  const paths = data.map(user => ({ params: { pid: user.id.toString() } }))
+  return {
+    paths,
+    fallback: false
+  }
+}
+
 // This gets called on every request
-export const getServerSideProps: GetServerSideProps = async ({params}) => {
+export const getStaticProps: GetStaticProps = async ({params}) => {
   // Fetch data from external API
   const res = await fetch(
     `https://jonasnicoletti.github.io/data/users/${params?.pid}.json`,

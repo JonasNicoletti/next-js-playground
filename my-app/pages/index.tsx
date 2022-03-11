@@ -1,4 +1,4 @@
-import type { GetServerSideProps, NextPage } from 'next'
+import type { GetServerSideProps, GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
@@ -34,7 +34,7 @@ const Home: NextPage<HomeProps> = ({users}) => {
 }
 
 // This gets called on every request
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
     // Fetch data from external API
   const res = await fetch('https://jonasnicoletti.github.io/data/users.json')
   const data = await res.json()
